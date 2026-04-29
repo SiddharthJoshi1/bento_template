@@ -1,0 +1,65 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Analyse
+        run: flutter analyze
+
+      - name: Test
+        run: flutter test
+
+      - name: Build web
+        run: |
+          flutter build web \
+            --dart-define=CONTENT_BASE_URL=${{ vars.CONTENT_BASE_URL }} \
+            --dart-define=MAP_USER_AGENT=${{ vars.MAP_USER_AGENT }} \
+            --dart-define=LUKEHOG_APP_ID=${{ secrets.LUKEHOG_APP_ID }}
+        # CONTENT_BASE_URL  — Repository variable (Settings → Variables)
+        #   Format: https://raw.githubusercontent.com/<user>/<repo>/content/
+        # MAP_USER_AGENT    — Repository variable (Settings → Variables)
+        #   Format: com.yourdomain.yourapp  (reverse-DNS, no spaces)
+        # LUKEHOG_APP_ID    — Repository secret (Settings → Secrets)
+        #   Leave unset to disable analytics silently.
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: build/web
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

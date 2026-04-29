@@ -1,0 +1,127 @@
+{
+  "instagram": {
+    "link_title": "Instagram",
+    "link_icon": "fa-brands fa-instagram",
+    "brand_colour": "#E1306C"
+  },
+  "facebook": {
+    "link_title": "Facebook",
+    "link_icon": "fa-brands fa-facebook",
+    "brand_colour": "#1877F2"
+  },
+  "twitter": {
+    "link_title": "Twitter",
+    "link_icon": "fa-brands fa-twitter",
+    "brand_colour": "#1DA1F2"
+  },
+  "x.com": {
+    "link_title": "X",
+    "link_icon": "fa-brands fa-x-twitter",
+    "brand_colour": "#000000"
+  },
+  "tiktok": {
+    "link_title": "TikTok",
+    "link_icon": "fa-brands fa-tiktok",
+    "brand_colour": "#000000"
+  },
+  "youtube": {
+    "link_title": "YouTube",
+    "link_icon": "fa-brands fa-youtube",
+    "brand_colour": "#FF0000"
+  },
+  "linkedin": {
+    "link_title": "LinkedIn",
+    "link_icon": "fa-brands fa-linkedin",
+    "brand_colour": "#0A66C2"
+  },
+  "snapchat": {
+    "link_title": "Snapchat",
+    "link_icon": "fa-brands fa-snapchat",
+    "brand_colour": "#FFFC00"
+  },
+  "pinterest": {
+    "link_title": "Pinterest",
+    "link_icon": "fa-brands fa-pinterest",
+    "brand_colour": "#BD081C"
+  },
+  "spotify": {
+    "link_title": "Spotify",
+    "link_icon": "fa-brands fa-spotify",
+    "brand_colour": "#1DB954"
+  },
+  "apple_music": {
+    "link_title": "Apple Music",
+    "link_icon": "fa-brands fa-apple",
+    "brand_colour": "#FA243C"
+  },
+  "soundcloud": {
+    "link_title": "SoundCloud",
+    "link_icon": "fa-brands fa-soundcloud",
+    "brand_colour": "#FF5500"
+  },
+  "twitch": {
+    "link_title": "Twitch",
+    "link_icon": "fa-brands fa-twitch",
+    "brand_colour": "#9146FF"
+  },
+  "discord": {
+    "link_title": "Discord",
+    "link_icon": "fa-brands fa-discord",
+    "brand_colour": "#5865F2"
+  },
+  "reddit": {
+    "link_title": "Reddit",
+    "link_icon": "fa-brands fa-reddit",
+    "brand_colour": "#FF4500"
+  },
+  "whatsapp": {
+    "link_title": "WhatsApp",
+    "link_icon": "fa-brands fa-whatsapp",
+    "brand_colour": "#25D366"
+  },
+  "telegram": {
+    "link_title": "Telegram",
+    "link_icon": "fa-brands fa-telegram",
+    "brand_colour": "#26A5E4"
+  },
+  "patreon": {
+    "link_title": "Patreon",
+    "link_icon": "fa-brands fa-patreon",
+    "brand_colour": "#FF424D"
+  },
+  "github": {
+    "link_title": "GitHub",
+    "link_icon": "fa-brands fa-github",
+    "brand_colour": "#000000"
+  },
+  "medium": {
+    "link_title": "Medium",
+    "link_icon": "fa-brands fa-medium",
+    "brand_colour": "#000000"
+  },
+  "behance": {
+    "link_title": "Behance",
+    "link_icon": "fa-brands fa-behance",
+    "brand_colour": "#1769FF"
+  },
+  "dribbble": {
+    "link_title": "Dribbble",
+    "link_icon": "fa-brands fa-dribbble",
+    "brand_colour": "#EA4C89"
+  },
+  "threads": {
+    "link_title": "Threads",
+    "link_icon": "fa-brands fa-threads",
+    "brand_colour": "#000000"
+  },
+  "substack": {
+    "link_title": "Substack",
+    "link_icon": "fa-brands fa-substack",
+    "brand_colour": "#FF6719"
+  },
+  "default": {
+    "link_title": "Website",
+    "link_icon": "fa-solid fa-link",
+    "brand_colour": "#000000"
+  }
+}
