@@ -4,6 +4,8 @@ A Flutter web portfolio template using a bento grid layout — differently-sized
 
 Fork this repo, customise `content.json`, and deploy your own portfolio in under an hour. No backend required.
 
+**[View live demo →](https://siddharthjoshi1.github.io/bento_template/)**
+
 ## Features
 
 - **Bento grid layout** with 9 tile size variants combining width (quarter/half/full) and height (bar/card/tower)

@@ -48,7 +48,12 @@ class MapConstants {
 
   /// Default zoom level for map tiles.
   static const double defaultZoom = 14.0;
-  
+
+  /// Minimum zoom — prevents zooming so far out that the MarkerLayer
+  /// re-renders multiple PulsingLocationDot instances and leaks
+  /// AnimationController objects.
+  static const double minZoom = 10.0;
+
   // Maximum zoom level for map tiles.
   static const double maxZoom = 16.0;
 }

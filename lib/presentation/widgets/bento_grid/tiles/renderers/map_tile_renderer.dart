@@ -21,6 +21,7 @@ class MapTileRenderer extends StatefulWidget {
 
 class _MapTileRendererState extends State<MapTileRenderer> {
   bool _mapReady = false;
+  late final MapController _mapController;
 
   /// Whether this tile has usable coordinates.
   bool get _hasCoords =>
@@ -29,11 +30,18 @@ class _MapTileRendererState extends State<MapTileRenderer> {
   @override
   void initState() {
     super.initState();
+    _mapController = MapController();
     // Defer FlutterMap initialisation by one frame so tile network requests
     // and layout don't fire during the scroll gesture that reveals this tile.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) setState(() => _mapReady = true);
     });
+  }
+
+  @override
+  void dispose() {
+    _mapController.dispose();
+    super.dispose();
   }
 
   @override
@@ -47,9 +55,11 @@ class _MapTileRendererState extends State<MapTileRenderer> {
       fit: StackFit.expand,
       children: [
         FlutterMap(
+          mapController: _mapController,
           options: MapOptions(
             initialCenter: centre,
             initialZoom: MapConstants.defaultZoom,
+            minZoom: MapConstants.minZoom,
             maxZoom: MapConstants.maxZoom,
             interactionOptions: InteractionOptions(flags: InteractiveFlag.pinchZoom | InteractiveFlag.drag)
           ),

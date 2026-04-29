@@ -39,15 +39,19 @@ git checkout --orphan content
 git rm -rf .
 ```
 
-Copy the starter `content.json` from this repo's `assets/data/content.json` into the root of this branch, then push it:
+Copy the starter `content.json` from this repo's `assets/data/content.json` into the **root** of this branch (not inside any subfolder — the raw URL must resolve to `https://raw.githubusercontent.com/<you>/<repo>/content/assets/data/content.json`), then push it:
 
 ```bash
-# (paste/edit content.json here)
-git add content.json
+# Copy assets/data/content.json from main, place it at assets/data/content.json on this branch
+mkdir -p assets/data
+cp /path/to/content.json assets/data/content.json
+git add assets/data/content.json
 git commit -m "init: content branch"
 git push origin content
 git checkout main
 ```
+
+> The folder structure on the `content` branch must mirror the path used in `CONTENT_BASE_URL`. If your variable is `https://raw.githubusercontent.com/<you>/<repo>/content/`, then `content.json` must live at `assets/data/content.json` on that branch.
 
 ---
 
