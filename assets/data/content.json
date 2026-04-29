@@ -1,0 +1,117 @@
+{
+  "version": "1.0.0",
+  "profile": {
+    "name": "Your Name",
+    "bio": "One-line bio that tells people what you do and what you care about.",
+    "avatar_path": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=400&q=80"
+  },
+  "tiles": [
+    {
+      "type": "section_title",
+      "tile_size": "full_bar",
+      "title": "What I'm working on."
+    },
+    {
+      "type": "link",
+      "tile_size": "half_tower",
+      "title": "Your Project Title",
+      "url": "https://github.com",
+      "image_path": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=80"
+    },
+    {
+      "type": "link",
+      "tile_size": "half_tower",
+      "title": "Another Project",
+      "url": "https://github.com",
+      "image_path": "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80"
+    },
+    {
+      "type": "section_title",
+      "tile_size": "full_bar",
+      "title": "How I work."
+    },
+    {
+      "type": "text",
+      "tile_size": "half_card",
+      "title": "Replace this with a short take on how you build, think, or collaborate.",
+      "colour": "#f9aa3a"
+    },
+    {
+      "type": "image",
+      "tile_size": "half_card",
+      "title": "Replace with your own image",
+      "image_path": "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=800&q=80"
+    },
+    {
+      "type": "section_title",
+      "tile_size": "full_bar",
+      "title": "Find me here."
+    },
+    {
+      "type": "map",
+      "tile_size": "quarter_card",
+      "title": "Your City, Country",
+      "latitude": 51.5074,
+      "longitude": -0.1278
+    },
+    {
+      "type": "link",
+      "tile_size": "quarter_card",
+      "title": "My CV",
+      "url": "https://your-cv-link.com"
+    },
+    {
+      "type": "link",
+      "tile_size": "half_card",
+      "title": "Connect on LinkedIn",
+      "url": "https://linkedin.com",
+      "image_path": "https://images.unsplash.com/photo-1611944212129-29977ae1398c?w=800&q=80"
+    },
+    {
+      "type": "section_title",
+      "tile_size": "full_bar",
+      "title": "Writing & Side Projects"
+    },
+    {
+      "type": "link",
+      "tile_size": "half_tower",
+      "title": "I write about what I'm building. Come read it.",
+      "url": "https://substack.com",
+      "image_path": "https://images.unsplash.com/photo-1455390582262-044cdead277a?w=800&q=80"
+    },
+    {
+      "type": "link",
+      "tile_size": "half_tower",
+      "title": "All my code lives here.",
+      "url": "https://github.com",
+      "image_path": "https://images.unsplash.com/photo-1556075798-4825dfaaf498?w=800&q=80"
+    },
+    {
+      "type": "section_title",
+      "tile_size": "full_bar",
+      "title": "Fancy working together?"
+    },
+    {
+      "type": "text",
+      "tile_size": "half_bar",
+      "title": "Get in touch",
+      "url": "mailto:you@yourdomain.com",
+      "colour": "#000000"
+    },
+    {
+      "type": "section_title",
+      "tile_size": "full_bar",
+      "title": "Interactive widgets"
+    },
+    {
+      "type": "widgets",
+      "tile_size": "half_tower",
+      "title": "Counter",
+      "widget_id": "counter_v1",
+      "colour": "#f9aa3a",
+      "widget_config": {
+        "label": "Taps"
+      }
+    }
+  ]
+}
