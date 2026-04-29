@@ -50,7 +50,7 @@ class MapConstants {
   static const double defaultZoom = 14.0;
   
   // Maximum zoom level for map tiles.
-  static const double maxZoom = 19.0;
+  static const double maxZoom = 16.0;
 }
 
 /// Remote content constants.
