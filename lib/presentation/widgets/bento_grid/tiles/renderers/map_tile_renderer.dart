@@ -50,6 +50,7 @@ class _MapTileRendererState extends State<MapTileRenderer> {
           options: MapOptions(
             initialCenter: centre,
             initialZoom: MapConstants.defaultZoom,
+            maxZoom: MapConstants.maxZoom,
             interactionOptions: InteractionOptions(flags: InteractiveFlag.pinchZoom | InteractiveFlag.drag)
           ),
           children: [
