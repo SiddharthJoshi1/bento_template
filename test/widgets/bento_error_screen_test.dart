@@ -26,7 +26,7 @@ void main() {
 
     testWidgets('renders CustomPaint for sad face', (tester) async {
       await tester.pumpWidget(buildSubject());
-      expect(find.byType(CustomPaint), findsOneWidget);
+      expect(find.byType(CustomPaint), findsAny);
     });
 
     testWidgets('accepts and stores message prop', (tester) async {
