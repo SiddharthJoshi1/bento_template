@@ -37,6 +37,11 @@ jobs:
 
       - name: Build web
         run: |
+        
+          echo "CONTENT_BASE_URL=${{ vars.CONTENT_BASE_URL }}"
+          echo "MAP_USER_AGENT=${{ vars.MAP_USER_AGENT }}"
+          echo "LUKEHOG_APP_ID=${{ secrets.LUKEHOG_APP_ID }}"
+        
           flutter build web \
             --base-href=/${{ github.event.repository.name }}/ \
             --dart-define=CONTENT_BASE_URL=${{ vars.CONTENT_BASE_URL }} \
