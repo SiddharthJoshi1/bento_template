@@ -38,9 +38,11 @@ jobs:
       - name: Build web
         run: |
           flutter build web \
+            --base-href=/${{ github.event.repository.name }}/ \
             --dart-define=CONTENT_BASE_URL=${{ vars.CONTENT_BASE_URL }} \
             --dart-define=MAP_USER_AGENT=${{ vars.MAP_USER_AGENT }} \
             --dart-define=LUKEHOG_APP_ID=${{ secrets.LUKEHOG_APP_ID }}
+        # base-href is set automatically from the repo name — works for any fork
         # CONTENT_BASE_URL  — Repository variable (Settings → Variables)
         #   Format: https://raw.githubusercontent.com/<user>/<repo>/content/
         # MAP_USER_AGENT    — Repository variable (Settings → Variables)
