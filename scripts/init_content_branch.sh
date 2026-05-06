@@ -41,6 +41,7 @@ git checkout --orphan "$BRANCH"
 
 echo "→ Clearing working tree..."
 git rm -rf . --quiet
+git clean -fdx --quiet
 
 echo "→ Restoring $CONTENT_PATH..."
 mkdir -p "$(dirname "$CONTENT_PATH")"
