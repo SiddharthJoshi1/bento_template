@@ -4,6 +4,29 @@ Agent-specific guidance for working in this repo. Read `CLAUDE.md` first for ful
 
 ---
 
+## First-time setup
+
+If the `content` branch does not yet exist on origin, run the setup script first:
+
+```bash
+bash scripts/init_content_branch.sh
+```
+
+This script must be run from the repo root while on `main`. It will:
+- Extract `assets/data/content.json` from main using `git show` (no temp files)
+- Create an orphan `content` branch with no shared history
+- Wipe the working tree and restore only `content.json` at the correct path
+- Commit and push to origin, then return you to main
+
+Do not recreate these steps manually — the script handles edge cases and path construction correctly. If the `content` branch already exists, skip this entirely.
+
+Verify setup succeeded:
+```bash
+git branch -r | grep content  # should show origin/content
+```
+
+---
+
 ## Before you start
 
 Always run these before making changes:
@@ -40,7 +63,7 @@ flutter analyze
 
 - `lib/presentation/widgets/bento_grid/tiles/smart_bento_tile.dart` — only edit if you're adding a new `TileType`. It's a pure factory; keep it that way.
 - `lib/core/network/cache_manager.dart` — the three-tier cache is load-bearing. Don't refactor without understanding the fallback chain.
-- The `content` branch on GitHub — this is where the live `content.json` is served from. Don't push app code there.
+- The `content` branch on GitHub — this is where the live `content.json` is served from. Don't push app code there. To initialise it, use `bash scripts/init_content_branch.sh` — never recreate the orphan branch manually.
 
 ---
 

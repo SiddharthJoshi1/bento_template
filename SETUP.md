@@ -28,30 +28,34 @@ flutter pub get
 
 ---
 
+> **Enable GitHub Pages now.** Go to your repo **Settings → Pages** and set the source to **GitHub Actions** before continuing. If you skip this, the deploy workflow will fail silently and you'll have to come back here anyway.
+
+---
+
 ## Step 2 — Set up the content branch
 
 Your portfolio content lives in a separate `content` branch, served via `raw.githubusercontent.com`. This means you can update your portfolio without ever rebuilding or redeploying the app.
 
-Create the content branch:
+A setup script handles this for you. From the root of your repo:
 
 ```bash
-git checkout --orphan content
-git rm -rf .
+bash scripts/init_content_branch.sh
 ```
 
-Copy the starter `content.json` from this repo's `assets/data/content.json` into the **root** of this branch (not inside any subfolder — the raw URL must resolve to `https://raw.githubusercontent.com/<you>/<repo>/content/assets/data/content.json`), then push it:
+Here's what it does, step by step:
 
-```bash
-# Copy assets/data/content.json from main, place it at assets/data/content.json on this branch
-mkdir -p assets/data
-cp /path/to/content.json assets/data/content.json
-git add assets/data/content.json
-git commit -m "init: content branch"
-git push origin content
-git checkout main
+1. **Reads `assets/data/content.json` directly from your main branch** using `git show` — no temp files, no manual copying
+2. **Creates an orphan branch** called `content` — a branch with no shared history with main, keeping it clean and minimal
+3. **Wipes the working tree** so the branch contains only what the app needs to fetch
+4. **Reconstructs `assets/data/content.json`** on the new branch using the content read in step 1
+5. **Commits and pushes** to origin, then returns you to main
+
+Once complete, your content will be accessible at:
+```
+https://raw.githubusercontent.com/<your-username>/<your-repo>/content/assets/data/content.json
 ```
 
-> The folder structure on the `content` branch must mirror the path used in `CONTENT_BASE_URL`. If your variable is `https://raw.githubusercontent.com/<you>/<repo>/content/`, then `content.json` must live at `assets/data/content.json` on that branch.
+> The folder path on the `content` branch must mirror the path used in `CONTENT_BASE_URL`. The script sets this up correctly — only move things manually if you know what you're doing.
 
 ---
 
