@@ -148,6 +148,17 @@ All portfolio content lives in `content.json`. The app fetches it remotely on st
 
 ## How to add a new interactive widget
 
+**Use the AI-assisted pipeline** (preferred — see [Skills](#skills) below):
+
+```
+1. bento-widget-preview  →  explore visual directions in HTML, select a variant
+2. dart run tool/new_widget.dart <widget_id> <tile_size>  →  scaffold stub files
+3. bento-widget-complete  →  fill in the implementation from the AGENT_HANDOFF
+4. flutter analyze  →  must pass clean
+```
+
+**Manual approach** (if building without the pipeline):
+
 1. Create `presentation/widgets/interactive_widgets/<name>/<name>_widget.dart` implementing `InteractiveWidget`
 2. Import it in `interactive_widget_registry.dart` and add one entry to `_widgets`:
    ```dart
@@ -198,9 +209,50 @@ flutter test                                  # Run tests
 
 ---
 
+## Skills
+
+Two Claude Code skills live in `skills/`. Always read the skill's `SKILL.md` before invoking it.
+
+### `bento-widget-preview`
+
+Generates an HTML file with **five distinct design variants** of an interactive widget, each rendered inside a correctly-sized bento tile. Use this **before writing any Dart** — explore layout and interaction in HTML first, compare the variants side by side, and pick one.
+
+- **Output location:** `skills/bento-widget-preview/outputs/<widget_id>-preview.html`
+- **Always generates five variants** — each a meaningfully different design direction (different interaction model, information hierarchy, or visual metaphor — not just colour tweaks)
+- Each variant has live interactive elements, a UX callout strip (web/mobile/tradeoff), and a "Select this variant" button
+- Clicking "Select this variant" updates the live **AGENT_HANDOFF panel** and the `content.json` snippet at the bottom of the page
+- The AGENT_HANDOFF block contains a precise Flutter implementation description, `config_schema`, `suggested_widget_config`, and the scaffold command
+- The static `<!-- AGENT_HANDOFF ... END_HANDOFF -->` comment before `</body>` reflects the agent's recommended variant; the user's panel selection overrides it
+
+### `bento-widget-complete`
+
+Implements a scaffolded widget in Flutter by reading the `AGENT_HANDOFF` block from the preview HTML. Fills in `_widget.dart`, `_canvas.dart`, and `_painter.dart`, then updates `content.json`.
+
+Prerequisites before invoking:
+1. A preview HTML exists with a valid `AGENT_HANDOFF` block (user has clicked "Select this variant")
+2. The scaffold has been run: `dart run tool/new_widget.dart <widget_id> <tile_size>`
+
+### Full pipeline
+
+```
+skills/bento-widget-preview/SKILL.md   →  read before generating preview HTML
+                ↓
+  HTML preview in browser — click "Select this variant"
+                ↓
+  dart run tool/new_widget.dart <widget_id>
+                ↓
+skills/bento-widget-complete/SKILL.md  →  read before implementing
+                ↓
+  flutter analyze  (must pass clean)
+```
+
+---
+
 ## Related
 
 - `AGENTS.md` — agent-specific workflow guidance
+- `skills/bento-widget-preview/` — HTML prototyping skill for interactive widgets
+- `skills/bento-widget-complete/` — Flutter implementation skill for interactive widgets
 - `assets/data/content.json` — bundled content fallback
 - `web/index.html` + `web/manifest.json` — PWA config
 - `bento_layout` pub.dev package — Skyline bin-packing algorithm used by the grid

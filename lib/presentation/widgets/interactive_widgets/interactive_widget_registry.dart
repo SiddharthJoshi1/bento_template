@@ -1,5 +1,6 @@
 import 'interactive_widget.dart';
 import 'counter/counter_widget.dart';
+import 'toggle_wall_v2/toggle_wall_v2_widget.dart';
 
 /// Static registry mapping widget IDs → factory functions.
 ///
@@ -19,6 +20,7 @@ class WidgetRegistry {
     'counter_v1': CounterWidget.new,
 
     // Add your widgets here:
+    'toggle_wall_v2': ToggleWallV2Widget.new,
     // 'my_widget_v1': MyWidget.new,
   };
 
