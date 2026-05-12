@@ -22,22 +22,12 @@ class ToggleWallV2Canvas extends StatefulWidget {
 }
 
 class _ToggleWallV2CanvasState extends State<ToggleWallV2Canvas> {
-  late List<bool> _states;
+  List<bool> _states = const [];
+  int _lastCount = 0;
 
-  @override
-  void initState() {
-    super.initState();
-    _states = List.filled(widget.columns * widget.rows, false);
-  }
-
-  @override
-  void didUpdateWidget(ToggleWallV2Canvas oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    final newCount = widget.columns * widget.rows;
-    if (_states.length != newCount) {
-      _states = List.filled(newCount, false);
-    }
-  }
+  static const double _gap = 8.0;
+  static const double _minCellSize = 28.0;
+  static const double _padding = 20.0;
 
   Color _neonColorFor(int index) {
     final hex = widget.neonColors[index % widget.neonColors.length];
@@ -45,7 +35,35 @@ class _ToggleWallV2CanvasState extends State<ToggleWallV2Canvas> {
   }
 
   void _toggle(int index) {
+    if (index < 0 || index >= _states.length) return;
     setState(() => _states[index] = !_states[index]);
+  }
+
+  void _resizeStates(int newCount) {
+    if (newCount == _lastCount) return;
+    _lastCount = newCount;
+    // Preserve existing on-states for cells that still exist.
+    final next = List.filled(newCount, false);
+    for (var i = 0; i < newCount && i < _states.length; i++) {
+      next[i] = _states[i];
+    }
+    _states = next;
+  }
+
+  int _computeColumns(double availableWidth) {
+    for (int cols = widget.columns; cols >= 1; cols--) {
+      final cellW = (availableWidth - (cols - 1) * _gap) / cols;
+      if (cellW >= _minCellSize) return cols;
+    }
+    return 1;
+  }
+
+  int _computeRows(double availableHeight) {
+    for (int rows = widget.rows; rows >= 1; rows--) {
+      final cellH = (availableHeight - (rows - 1) * _gap) / rows;
+      if (cellH >= _minCellSize) return rows;
+    }
+    return 1;
   }
 
   @override
@@ -57,30 +75,30 @@ class _ToggleWallV2CanvasState extends State<ToggleWallV2Canvas> {
         color: bg,
         borderRadius: BorderRadius.circular(12),
       ),
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(_padding),
       child: LayoutBuilder(
         builder: (context, constraints) {
-          final gapW = 8.0;
-          final gapH = 8.0;
-          final cellW = (constraints.maxWidth -
-                  (widget.columns - 1) * gapW) /
-              widget.columns;
-          final cellH = (constraints.maxHeight -
-                  (widget.rows - 1) * gapH) /
-              widget.rows;
+          // constraints is already the inner size after Container padding.
+          final cols = _computeColumns(constraints.maxWidth);
+          final rows = _computeRows(constraints.maxHeight);
+          final count = cols * rows;
+
+          _resizeStates(count);
+
+          final cellW = (constraints.maxWidth - (cols - 1) * _gap) / cols;
+          final cellH = (constraints.maxHeight - (rows - 1) * _gap) / rows;
 
           return Wrap(
-            spacing: gapW,
-            runSpacing: gapH,
-            children: List.generate(widget.columns * widget.rows, (i) {
-              final neon = _neonColorFor(i);
-              final isOn = _states[i];
-
+            spacing: _gap,
+            runSpacing: _gap,
+            alignment: WrapAlignment.center,
+            runAlignment: WrapAlignment.center,
+            children: List.generate(count, (i) {
               return _NeonCell(
                 width: cellW,
                 height: cellH,
-                neonColor: neon,
-                isOn: isOn,
+                neonColor: _neonColorFor(i),
+                isOn: _states[i],
                 glowIntensity: widget.glowIntensity,
                 onTap: () => _toggle(i),
               );
@@ -148,8 +166,8 @@ class _NeonCellState extends State<_NeonCell> {
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 300),
               curve: Curves.ease,
-              width: 16,
-              height: 16,
+              width: (widget.width * 0.35).clamp(8.0, 20.0),
+              height: (widget.height * 0.35).clamp(8.0, 20.0),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: widget.isOn ? widget.neonColor : const Color(0xFF333333),
