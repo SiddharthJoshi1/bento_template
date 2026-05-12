@@ -1,5 +1,5 @@
 {
-  "version": "1.0.1",
+  "version": "1.0.2",
   "profile": {
     "name": "Your Name",
     "bio": "One-line bio that tells people what you do and what you care about.",
@@ -111,6 +111,20 @@
       "colour": "#f9aa3a",
       "widget_config": {
         "label": "Taps"
+      }
+    },
+    {
+      "type": "widgets",
+      "tile_size": "half_tower",
+      "title": "Toggle Wall",
+      "widget_id": "toggle_wall_v2",
+     "colour": "#000000"
+      "widget_config": {
+        "columns": 4,
+        "rows": 6,
+        "bg_color": "#0F0F1A",
+        "neon_colors": ["#00F0FF", "#FF006E", "#39FF14", "#FFD600", "#BF00FF", "#FF4500"],
+        "glow_intensity": 1.0
       }
     }
   ]
