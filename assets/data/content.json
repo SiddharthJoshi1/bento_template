@@ -118,7 +118,7 @@
       "tile_size": "half_tower",
       "title": "Toggle Wall",
       "widget_id": "toggle_wall_v2",
-     "colour": "#000000"
+     "colour": "#000000",
       "widget_config": {
         "columns": 4,
         "rows": 6,
