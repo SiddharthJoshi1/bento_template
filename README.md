@@ -28,6 +28,7 @@ Click **Use this template → Create a new repository**, then follow [`SETUP.md`
 | [`SETUP.md`](./SETUP.md) | Fork, configure your content branch, personalise metadata, deploy |
 | [`WIDGET_GUIDE.md`](./WIDGET_GUIDE.md) | Build your own interactive widgets — step-by-step with a working example |
 | [`CLAUDE.md`](./CLAUDE.md) | Architecture reference, content schema, layer rules — for LLM agents and contributors |
+| [`skills/`](./skills/) | Claude Code skills for prototyping and implementing widgets with AI |
 
 ## Architecture
 
@@ -60,6 +61,30 @@ Pass your content URL to enable remote fetching locally:
 flutter run -d chrome \
   --dart-define=CONTENT_BASE_URL=https://raw.githubusercontent.com/<you>/<repo>/content/
 ```
+
+## Building widgets with AI (Claude Code)
+
+This template includes two Claude Code skills that take you from idea to working Flutter widget without leaving your editor.
+
+**`bento-widget-preview`** — generates an interactive HTML file that renders your widget concept inside a correctly-sized bento tile. In grid mode it compares multiple visual directions side by side. When you've found the one you want, click **"Select this variant"** — the page generates the exact `AGENT_HANDOFF` spec (implementation description, config schema, scaffold command) for that design.
+
+**`bento-widget-complete`** — reads the `AGENT_HANDOFF` and fills in the scaffolded Dart files.
+
+**The workflow:**
+
+```
+1. Read skills/bento-widget-preview/SKILL.md
+2. Generate a preview HTML  →  browser opens, compare variants
+3. Click "Select this variant"  →  AGENT_HANDOFF panel updates
+4. Copy and run the scaffold command shown in the panel
+5. Read skills/bento-widget-complete/SKILL.md
+6. Invoke bento-widget-complete  →  Dart files are implemented
+7. flutter analyze  →  must pass clean
+```
+
+Both skills are in [`skills/`](./skills/). Sample prompts are in each skill's `prompts.md`.
+
+---
 
 ## Related
 
