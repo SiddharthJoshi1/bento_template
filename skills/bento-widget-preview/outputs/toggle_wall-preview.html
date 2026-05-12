@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Toggle Wall — Widget Preview</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #F5F5F5; color: #333; padding: 32px; }
+
+  header { text-align: center; margin-bottom: 40px; }
+  header h1 { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
+  header .meta { font-size: 14px; color: #888; }
+
+  .grid { display: flex; flex-wrap: wrap; gap: 32px; justify-content: center; max-width: 1500px; margin: 0 auto 48px; }
+
+  .variant-card { width: 280px; flex-shrink: 0; }
+  .variant-card h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; text-align: center; }
+
+  .tile-container {
+    width: 280px; height: 560px; background: #fff; border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08); overflow: hidden; position: relative;
+    transition: box-shadow 0.2s;
+  }
+  .variant-card.selected .tile-container {
+    box-shadow: 0 0 0 3px #4F46E5, 0 4px 20px rgba(79,70,229,0.25);
+  }
+  .variant-card.selected .selected-badge { display: inline-block; }
+  .selected-badge {
+    display: none; background: #4F46E5; color: #fff; font-size: 11px; font-weight: 600;
+    padding: 2px 10px; border-radius: 10px; margin-left: 8px; vertical-align: middle;
+  }
+
+  .ux-callout {
+    margin-top: 12px; padding: 10px 12px; background: #FAFAFA; border-radius: 8px;
+    font-size: 12px; line-height: 1.6; border: 1px solid #E8E8E8;
+  }
+  .ux-callout div { margin-bottom: 4px; }
+  .ux-callout div:last-child { margin-bottom: 0; }
+
+  .tile-meta {
+    margin-top: 8px; text-align: center; font-size: 12px; color: #888;
+  }
+  .tile-meta code { background: #EEEEF0; padding: 2px 6px; border-radius: 4px; font-size: 11px; }
+  .tile-meta .badge { background: #E0E7FF; color: #4338CA; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; margin-left: 6px; }
+
+  .select-btn {
+    display: block; width: 100%; margin-top: 12px; padding: 10px; border: 2px solid #4F46E5;
+    border-radius: 8px; background: #fff; color: #4F46E5; font-size: 14px; font-weight: 600;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .select-btn:hover { background: #4F46E5; color: #fff; }
+
+  #handoff-panel {
+    max-width: 900px; margin: 0 auto 40px; background: #fff; border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08); padding: 28px;
+  }
+  #handoff-panel h2 { font-size: 20px; margin-bottom: 16px; }
+  #handoff-panel pre {
+    background: #1E1E2E; color: #CDD6F4; padding: 16px; border-radius: 8px;
+    font-size: 12px; line-height: 1.6; overflow-x: auto; white-space: pre-wrap; word-break: break-word;
+  }
+  .copy-btn {
+    display: inline-block; padding: 6px 14px; background: #4F46E5; color: #fff;
+    border: none; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer;
+    margin-top: 8px; transition: background 0.15s;
+  }
+  .copy-btn:hover { background: #4338CA; }
+  .copy-btn.copied { background: #16A34A; }
+
+  .snippet-section {
+    max-width: 900px; margin: 0 auto 40px; background: #fff; border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08); padding: 28px;
+  }
+  .snippet-section h2 { font-size: 20px; margin-bottom: 16px; }
+  .snippet-section pre {
+    background: #1E1E2E; color: #CDD6F4; padding: 16px; border-radius: 8px;
+    font-size: 12px; line-height: 1.6; overflow-x: auto;
+  }
+
+  footer {
+    text-align: center; padding: 24px; font-size: 13px; color: #999;
+    border-top: 1px solid #E8E8E8; max-width: 900px; margin: 0 auto;
+  }
+
+  /* ---- Variant 1: Split-Flap Departure Board ---- */
+  .v1-grid { display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(7, 1fr); gap: 4px; padding: 16px; width: 100%; height: 100%; }
+  .v1-cell {
+    perspective: 400px; cursor: pointer; position: relative;
+  }
+  .v1-flap {
+    width: 100%; height: 100%; position: relative; transform-style: preserve-3d;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 4px;
+  }
+  .v1-flap.flipped { transform: rotateX(180deg); }
+  .v1-face {
+    position: absolute; inset: 0; backface-visibility: hidden; border-radius: 4px;
+    display: flex; align-items: center; justify-content: center; font-weight: 700;
+    font-size: 14px;
+  }
+  .v1-front { background: #1E293B; color: #94A3B8; }
+  .v1-back { background: #FBBF24; color: #1E293B; transform: rotateX(180deg); }
+  .v1-cell:hover .v1-flap:not(.flipped) { transform: rotateX(15deg); }
+
+  /* ---- Variant 2: Neon Light Switches ---- */
+  .v2-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(6, 1fr); gap: 8px; padding: 16px; width: 100%; height: 100%; background: #0F0F1A; border-radius: 12px; }
+  .v2-switch {
+    border-radius: 8px; cursor: pointer; position: relative; overflow: hidden;
+    background: #1A1A2E; border: 1px solid #2A2A4A; transition: all 0.3s ease;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .v2-switch .glow {
+    width: 16px; height: 16px; border-radius: 50%; background: #333;
+    transition: all 0.3s ease; box-shadow: none;
+  }
+  .v2-switch.on { border-color: var(--neon); background: rgba(var(--neon-rgb), 0.08); }
+  .v2-switch.on .glow {
+    background: var(--neon);
+    box-shadow: 0 0 8px var(--neon), 0 0 20px var(--neon), 0 0 40px rgba(var(--neon-rgb), 0.3);
+  }
+  .v2-switch:hover { transform: scale(1.05); }
+
+  /* ---- Variant 3: Domino Cascade Tiles ---- */
+  .v3-grid { display: grid; grid-template-columns: repeat(6, 1fr); grid-template-rows: repeat(8, 1fr); gap: 3px; padding: 12px; width: 100%; height: 100%; }
+  .v3-cell {
+    border-radius: 3px; cursor: pointer; transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    background: #E2E8F0; position: relative;
+  }
+  .v3-cell.on {
+    background: #6366F1; transform: scale(0.88) rotate(2deg);
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.4);
+  }
+  .v3-cell.ripple { animation: v3ripple 0.3s ease-out; }
+  @keyframes v3ripple {
+    0% { transform: scale(1.15); }
+    100% { transform: scale(1); }
+  }
+  .v3-cell:hover:not(.on) { background: #CBD5E1; transform: scale(1.05); }
+
+  /* ---- Variant 4: Mechanical Keyboard ---- */
+  .v4-grid { display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(5, 1fr); gap: 6px; padding: 20px; width: 100%; height: 100%; background: #2D2D2D; border-radius: 12px; }
+  .v4-key {
+    border-radius: 6px; cursor: pointer; position: relative;
+    background: linear-gradient(180deg, #4A4A4A 0%, #3A3A3A 100%);
+    box-shadow: 0 4px 0 #222, 0 6px 8px rgba(0,0,0,0.3);
+    transition: all 0.08s ease; display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; color: #888; text-transform: uppercase;
+    font-family: 'Courier New', monospace; letter-spacing: 1px;
+    border: 1px solid #555; border-bottom: none;
+  }
+  .v4-key:active, .v4-key.pressed {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 #222, 0 2px 4px rgba(0,0,0,0.3);
+  }
+  .v4-key.on {
+    background: linear-gradient(180deg, #7C3AED 0%, #6D28D9 100%);
+    color: #E9D5FF; border-color: #8B5CF6;
+    box-shadow: 0 4px 0 #4C1D95, 0 6px 8px rgba(124, 58, 237, 0.3), 0 0 16px rgba(124, 58, 237, 0.2);
+  }
+  .v4-key.on:active, .v4-key.on.pressed {
+    box-shadow: 0 1px 0 #4C1D95, 0 2px 4px rgba(124, 58, 237, 0.3);
+  }
+
+  /* ---- Variant 5: Fluid Morph Grid ---- */
+  .v5-wrap { width: 100%; height: 100%; padding: 12px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #FAF5FF, #EEF2FF); }
+  .v5-grid { display: grid; grid-template-columns: repeat(5, 1fr); grid-template-rows: repeat(7, 1fr); gap: 6px; width: 100%; height: 100%; }
+  .v5-blob {
+    border-radius: 50%; cursor: pointer; background: #E0E7FF;
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); border: 2px solid transparent;
+  }
+  .v5-blob:hover:not(.on) { border-radius: 35%; background: #C7D2FE; transform: scale(1.1); }
+  .v5-blob.on {
+    border-radius: 25%; background: #818CF8;
+    box-shadow: 0 4px 16px rgba(129, 140, 248, 0.4);
+    transform: scale(1.05) rotate(45deg);
+  }
+  .v5-blob.morph { animation: v5morph 0.6s ease; }
+  @keyframes v5morph {
+    0% { border-radius: 50%; transform: scale(0.6); }
+    50% { border-radius: 20%; transform: scale(1.2) rotate(90deg); }
+    100% { border-radius: 25%; transform: scale(1.05) rotate(45deg); }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Toggle Wall <span class="selected-badge" id="global-badge" style="display:none">Preview</span></h1>
+  <div class="meta">widget_id: <code>toggle_wall</code> · tile_size: <code>half_card</code> · 2026-05-12</div>
+</header>
+
+<main class="grid">
+
+  <!-- ===== VARIANT 1: Split-Flap Departure Board ===== -->
+  <div class="variant-card" data-variant="v1">
+    <h3>V1 — Split-Flap Board <span class="selected-badge">Selected</span></h3>
+    <div class="tile-container" id="tile-v1">
+      <div class="v1-grid" id="v1-grid"></div>
+    </div>
+    <div class="ux-callout">
+      <div>🖥 <strong>Web:</strong> Hover peeks the flap before committing; precise mouse clicks make the small cells comfortable.</div>
+      <div>📱 <strong>Mobile:</strong> 5-column cells are ~44px at half_card width — right at the minimum touch target; fat-finger misclicks are possible.</div>
+      <div>⚖️ <strong>Tradeoff:</strong> Prioritises nostalgic delight and satisfying 3D animation; sacrifices density for legible flip effect.</div>
+    </div>
+    <div class="tile-meta"><code>toggle_wall_v1</code> <span class="badge">half_card</span></div>
+    <button class="select-btn" onclick="selectVariant('v1')">Select this variant</button>
+  </div>
+
+  <!-- ===== VARIANT 2: Neon Light Switches ===== -->
+  <div class="variant-card" data-variant="v2">
+    <h3>V2 — Neon Light Panel <span class="selected-badge">Selected</span></h3>
+    <div class="tile-container" id="tile-v2">
+      <div class="v2-grid" id="v2-grid"></div>
+    </div>
+    <div class="ux-callout">
+      <div>🖥 <strong>Web:</strong> Neon glow effect is visually striking on screen; hover scale gives clear affordance.</div>
+      <div>📱 <strong>Mobile:</strong> 4-column layout yields ~60px touch targets — comfortable for thumbs. Dark background demands good contrast.</div>
+      <div>⚖️ <strong>Tradeoff:</strong> Prioritises visual drama and atmosphere; sacrifices subtlety — may feel heavy alongside minimal portfolio tiles.</div>
+    </div>
+    <div class="tile-meta"><code>toggle_wall_v2</code> <span class="badge">half_card</span></div>
+    <button class="select-btn" onclick="selectVariant('v2')">Select this variant</button>
+  </div>
+
+  <!-- ===== VARIANT 3: Domino Cascade ===== -->
+  <div class="variant-card" data-variant="v3">
+    <h3>V3 — Domino Cascade <span class="selected-badge">Selected</span></h3>
+    <div class="tile-container" id="tile-v3">
+      <div class="v3-grid" id="v3-grid"></div>
+    </div>
+    <div class="ux-callout">
+      <div>🖥 <strong>Web:</strong> High cell density creates satisfying chain reactions; hover preview keeps interaction intuitive.</div>
+      <div>📱 <strong>Mobile:</strong> 6×8 grid cells are ~36px — below 44px minimum; consider reducing to 5×7 on mobile for touch comfort.</div>
+      <div>⚖️ <strong>Tradeoff:</strong> Prioritises cascade delight and pattern-making; sacrifices touch accuracy for higher tile density.</div>
+    </div>
+    <div class="tile-meta"><code>toggle_wall_v3</code> <span class="badge">half_card</span></div>
+    <button class="select-btn" onclick="selectVariant('v3')">Select this variant</button>
+  </div>
+
+  <!-- ===== VARIANT 4: Mechanical Keyboard ===== -->
+  <div class="variant-card" data-variant="v4">
+    <h3>V4 — Mechanical Keyboard <span class="selected-badge">Selected</span></h3>
+    <div class="tile-container" id="tile-v4">
+      <div class="v4-grid" id="v4-grid"></div>
+    </div>
+    <div class="ux-callout">
+      <div>🖥 <strong>Web:</strong> Physical key depression feels satisfying with mouse; 5×5 grid gives generous clickable area per key.</div>
+      <div>📱 <strong>Mobile:</strong> Large keys (~48px) are comfortable touch targets; the 3D press effect translates well to tap feedback.</div>
+      <div>⚖️ <strong>Tradeoff:</strong> Prioritises tactile realism and physical satisfaction; sacrifices cell count — fewer toggles means less pattern complexity.</div>
+    </div>
+    <div class="tile-meta"><code>toggle_wall_v4</code> <span class="badge">half_card</span></div>
+    <button class="select-btn" onclick="selectVariant('v4')">Select this variant</button>
+  </div>
+
+  <!-- ===== VARIANT 5: Fluid Morph Grid ===== -->
+  <div class="variant-card" data-variant="v5">
+    <h3>V5 — Fluid Morph <span class="selected-badge">Selected</span></h3>
+    <div class="tile-container" id="tile-v5">
+      <div class="v5-wrap">
+        <div class="v5-grid" id="v5-grid"></div>
+      </div>
+    </div>
+    <div class="ux-callout">
+      <div>🖥 <strong>Web:</strong> Smooth morphing animation is mesmerising on hover; the organic shapes stand out against boxy portfolio tiles.</div>
+      <div>📱 <strong>Mobile:</strong> 5×7 cells at ~44px are on the edge; the rotation transform makes the active shape slightly larger, aiding visibility.</div>
+      <div>⚖️ <strong>Tradeoff:</strong> Prioritises organic visual interest and uniqueness; sacrifices the snappy tactile feel for fluid, slower animations.</div>
+    </div>
+    <div class="tile-meta"><code>toggle_wall_v5</code> <span class="badge">half_card</span></div>
+    <button class="select-btn" onclick="selectVariant('v5')">Select this variant</button>
+  </div>
+
+</main>
+
+<!-- Handoff Panel -->
+<section id="handoff-panel">
+  <h2>AGENT_HANDOFF <span class="selected-badge" id="panel-badge" style="display:none"></span></h2>
+  <pre id="handoff-text"></pre>
+  <button class="copy-btn" onclick="copyHandoff()">Copy AGENT_HANDOFF</button>
+  <h3 style="margin-top:20px; font-size:16px;">Scaffold Command</h3>
+  <pre id="scaffold-text" style="font-size:13px;"></pre>
+  <button class="copy-btn" onclick="copyScaffold()">Copy scaffold command</button>
+</section>
+
+<!-- Content.json Snippet -->
+<section class="snippet-section">
+  <h2>content.json snippet</h2>
+  <pre id="snippet-text"></pre>
+  <button class="copy-btn" onclick="copySnippet()">Copy content.json snippet</button>
+</section>
+
+<footer>Prototype only. Implement in Flutter via InteractiveWidget.</footer>
+
+<script>
+const NEON_COLORS = [
+  { css: '#00F0FF', rgb: '0,240,255' },
+  { css: '#FF006E', rgb: '255,0,110' },
+  { css: '#39FF14', rgb: '57,255,20' },
+  { css: '#FFD600', rgb: '255,214,0' },
+  { css: '#BF00FF', rgb: '191,0,255' },
+  { css: '#FF4500', rgb: '255,69,0' },
+];
+
+const KEY_LABELS = [
+  'ESC','F1','F2','F3','F4',
+  'Q','W','E','R','T',
+  'A','S','D','F','G',
+  'Z','X','C','V','B',
+  'SPC','←','↑','↓','→',
+];
+
+// ---- Build grids ----
+function buildV1() {
+  const grid = document.getElementById('v1-grid');
+  for (let i = 0; i < 35; i++) {
+    const cell = document.createElement('div');
+    cell.className = 'v1-cell';
+    cell.innerHTML = '<div class="v1-flap"><div class="v1-face v1-front">·</div><div class="v1-face v1-back">●</div></div>';
+    cell.addEventListener('click', () => {
+      const flap = cell.querySelector('.v1-flap');
+      flap.classList.toggle('flipped');
+      cascadeV1(i, grid);
+    });
+    grid.appendChild(cell);
+  }
+}
+
+function cascadeV1(index, grid) {
+  const cols = 5;
+  const neighbors = [index - 1, index + 1, index - cols, index + cols];
+  neighbors.forEach((n, di) => {
+    if (n >= 0 && n < 35) {
+      const nCell = grid.children[n];
+      if (!nCell) return;
+      setTimeout(() => {
+        const flap = nCell.querySelector('.v1-flap');
+        flap.classList.toggle('flipped');
+      }, 120 + di * 60);
+    }
+  });
+}
+
+function buildV2() {
+  const grid = document.getElementById('v2-grid');
+  for (let i = 0; i < 24; i++) {
+    const sw = document.createElement('div');
+    sw.className = 'v2-switch';
+    const neon = NEON_COLORS[i % NEON_COLORS.length];
+    sw.style.setProperty('--neon', neon.css);
+    sw.style.setProperty('--neon-rgb', neon.rgb);
+    sw.innerHTML = '<div class="glow"></div>';
+    sw.addEventListener('click', () => sw.classList.toggle('on'));
+    grid.appendChild(sw);
+  }
+}
+
+function buildV3() {
+  const grid = document.getElementById('v3-grid');
+  for (let i = 0; i < 48; i++) {
+    const cell = document.createElement('div');
+    cell.className = 'v3-cell';
+    cell.addEventListener('click', () => {
+      cell.classList.toggle('on');
+      cell.classList.add('ripple');
+      setTimeout(() => cell.classList.remove('ripple'), 300);
+      cascadeV3(i, grid);
+    });
+    grid.appendChild(cell);
+  }
+}
+
+function cascadeV3(index, grid) {
+  const cols = 6;
+  const neighbors = [
+    index - 1, index + 1, index - cols, index + cols,
+    index - cols - 1, index - cols + 1, index + cols - 1, index + cols + 1
+  ];
+  const source = grid.children[index];
+  const sourceOn = source.classList.contains('on');
+  neighbors.forEach((n, di) => {
+    if (n >= 0 && n < 48) {
+      setTimeout(() => {
+        const nCell = grid.children[n];
+        if (sourceOn) nCell.classList.add('on');
+        else nCell.classList.remove('on');
+        nCell.classList.add('ripple');
+        setTimeout(() => nCell.classList.remove('ripple'), 300);
+      }, 60 + di * 40);
+    }
+  });
+}
+
+function buildV4() {
+  const grid = document.getElementById('v4-grid');
+  for (let i = 0; i < 25; i++) {
+    const key = document.createElement('div');
+    key.className = 'v4-key';
+    key.textContent = KEY_LABELS[i] || '';
+    key.addEventListener('mousedown', () => key.classList.add('pressed'));
+    key.addEventListener('mouseup', () => {
+      key.classList.remove('pressed');
+      key.classList.toggle('on');
+    });
+    key.addEventListener('mouseleave', () => key.classList.remove('pressed'));
+    key.addEventListener('touchstart', (e) => { e.preventDefault(); key.classList.add('pressed'); });
+    key.addEventListener('touchend', (e) => { e.preventDefault(); key.classList.remove('pressed'); key.classList.toggle('on'); });
+    grid.appendChild(key);
+  }
+}
+
+function buildV5() {
+  const grid = document.getElementById('v5-grid');
+  for (let i = 0; i < 35; i++) {
+    const blob = document.createElement('div');
+    blob.className = 'v5-blob';
+    blob.addEventListener('click', () => {
+      blob.classList.toggle('on');
+      if (blob.classList.contains('on')) {
+        blob.classList.add('morph');
+        setTimeout(() => blob.classList.remove('morph'), 600);
+      }
+      propagateV5(i, grid);
+    });
+    grid.appendChild(blob);
+  }
+}
+
+function propagateV5(index, grid) {
+  const cols = 5;
+  const neighbors = [index - 1, index + 1, index - cols, index + cols];
+  const src = grid.children[index].classList.contains('on');
+  neighbors.forEach((n, di) => {
+    if (n >= 0 && n < 35) {
+      setTimeout(() => {
+        const b = grid.children[n];
+        if (src && !b.classList.contains('on')) {
+          b.classList.add('on', 'morph');
+          setTimeout(() => b.classList.remove('morph'), 600);
+        }
+      }, 100 + di * 80);
+    }
+  });
+}
+
+buildV1(); buildV2(); buildV3(); buildV4(); buildV5();
+
+// ---- HANDOFFS ----
+const HANDOFFS = {
+  v1: {
+    widget_id: 'toggle_wall_v1',
+    variant: 'Split-Flap Board',
+    tile_size: 'half_card',
+    display_name: 'Toggle Wall',
+    description: `A 5×7 grid of split-flap style toggle cells. Each cell has two faces (front: dark slate with a dot, back: amber with a filled circle). Tapping a cell triggers a 3D rotateX(180deg) flip animation with a 400ms cubic-bezier(0.4, 0, 0.2, 1) curve. On flip, the four orthogonal neighbors (left, right, up, down) cascade-flip after staggered delays (120ms + 60ms per neighbor index). Each cell is independently togglable — tapping a flipped cell flips it back, which also cascades to neighbors. On hover (web only), unflipped cells peek by rotating 15deg on X axis. The grid uses 4px gap, 4px border-radius per cell. Front face: #1E293B background, #94A3B8 text. Back face: #FBBF24 background, #1E293B text. The widget maintains a 35-element boolean state array tracking flipped/unflipped per cell.`,
+    painter_needed: false,
+    web_ux: 'Hover peeks the flap before committing; precise mouse clicks make the small cells comfortable at half_card.',
+    mobile_ux: '5-column cells are ~44px at half_card width — right at the minimum touch target; fat-finger misclicks are possible.',
+    tradeoff: 'Prioritises nostalgic delight and satisfying 3D animation; sacrifices density for legible flip effect.',
+    config_schema: [
+      { key: 'columns', type: 'int', note: 'default 5, range 3-8' },
+      { key: 'rows', type: 'int', note: 'default 7, range 4-10' },
+      { key: 'front_color', type: 'String', note: 'hex, default "#1E293B"' },
+      { key: 'back_color', type: 'String', note: 'hex, default "#FBBF24"' },
+      { key: 'cascade_enabled', type: 'bool', note: 'default true' },
+      { key: 'cascade_delay_ms', type: 'int', note: 'default 120, range 50-300' },
+    ],
+    suggested_widget_config: { columns: 5, rows: 7, front_color: '#1E293B', back_color: '#FBBF24', cascade_enabled: true, cascade_delay_ms: 120 },
+    scaffold_command: 'dart run tool/new_widget.dart toggle_wall_v1',
+  },
+  v2: {
+    widget_id: 'toggle_wall_v2',
+    variant: 'Neon Light Panel',
+    tile_size: 'half_card',
+    display_name: 'Toggle Wall',
+    description: `A 4×6 grid of circular neon light toggles on a dark background (#0F0F1A). Each cell contains a 16px diameter circle (the "bulb"). In the off state, the bulb is #333 with no glow. On tap, the cell toggles on: the bulb takes a neon color and emits a three-layer box-shadow glow (8px tight, 20px medium, 40px diffuse at 30% opacity). Each cell cycles through 6 neon colors in order: #00F0FF, #FF006E, #39FF14, #FFD600, #BF00FF, #FF4500 — assigned by cell index modulo 6. The cell border changes to match the neon color when on, and the background gets an 8% tint of the neon color. Cells have 8px gap, 8px border-radius. On hover (web), cells scale to 1.05x. The transition duration is 300ms ease. The widget maintains a 24-element boolean state array. No cascade effect — each cell is independent.`,
+    painter_needed: false,
+    web_ux: 'Neon glow is visually striking on screen; hover scale gives clear affordance at half_card.',
+    mobile_ux: '4-column layout yields ~60px touch targets — comfortable for thumbs. Dark background demands good contrast.',
+    tradeoff: 'Prioritises visual drama and atmosphere; sacrifices subtlety — may feel heavy alongside minimal portfolio tiles.',
+    config_schema: [
+      { key: 'columns', type: 'int', note: 'default 4, range 3-6' },
+      { key: 'rows', type: 'int', note: 'default 6, range 4-8' },
+      { key: 'bg_color', type: 'String', note: 'hex, default "#0F0F1A"' },
+      { key: 'neon_colors', type: 'List<String>', note: 'hex array, default 6 neon colors' },
+      { key: 'glow_intensity', type: 'double', note: 'default 1.0, range 0.5-2.0' },
+    ],
+    suggested_widget_config: { columns: 4, rows: 6, bg_color: '#0F0F1A', neon_colors: ['#00F0FF','#FF006E','#39FF14','#FFD600','#BF00FF','#FF4500'], glow_intensity: 1.0 },
+    scaffold_command: 'dart run tool/new_widget.dart toggle_wall_v2',
+  },
+  v3: {
+    widget_id: 'toggle_wall_v3',
+    variant: 'Domino Cascade',
+    tile_size: 'half_card',
+    display_name: 'Toggle Wall',
+    description: `A 6×8 grid of square cells with aggressive cascade behavior. Each cell is a small rounded rectangle (3px radius). Off state: #E2E8F0 (light slate). On state: #6366F1 (indigo) with scale(0.88) and rotate(2deg) transform plus a colored box-shadow. Tapping a cell toggles it and triggers a cascade to all 8 surrounding neighbors (orthogonal + diagonal). Neighbors adopt the same on/off state as the tapped cell, with staggered delays (60ms base + 40ms per neighbor). Each cascading cell plays a 300ms scale ripple animation (scale 1.15 → 1.0). On hover (web), unactivated cells lighten to #CBD5E1 and scale to 1.05x. The grid uses 3px gap. The widget stores a 48-element boolean state array. The cascade creates a satisfying wave pattern when you tap rapidly across the grid.`,
+    painter_needed: false,
+    web_ux: 'High cell density creates satisfying chain reactions; hover preview keeps interaction intuitive at half_card.',
+    mobile_ux: '6×8 cells are ~36px — below 44px minimum; consider reducing to 5×7 on mobile for touch comfort.',
+    tradeoff: 'Prioritises cascade delight and pattern-making; sacrifices touch accuracy for higher tile density.',
+    config_schema: [
+      { key: 'columns', type: 'int', note: 'default 6, range 4-8' },
+      { key: 'rows', type: 'int', note: 'default 8, range 5-10' },
+      { key: 'active_color', type: 'String', note: 'hex, default "#6366F1"' },
+      { key: 'cascade_enabled', type: 'bool', note: 'default true' },
+      { key: 'cascade_delay_ms', type: 'int', note: 'default 60, range 30-200' },
+      { key: 'include_diagonals', type: 'bool', note: 'default true' },
+    ],
+    suggested_widget_config: { columns: 6, rows: 8, active_color: '#6366F1', cascade_enabled: true, cascade_delay_ms: 60, include_diagonals: true },
+    scaffold_command: 'dart run tool/new_widget.dart toggle_wall_v3',
+  },
+  v4: {
+    widget_id: 'toggle_wall_v4',
+    variant: 'Mechanical Keyboard',
+    tile_size: 'half_card',
+    display_name: 'Toggle Wall',
+    description: `A 5×5 grid styled as mechanical keyboard keycaps on a dark plate (#2D2D2D). Each key has a 3D appearance: linear-gradient top face (#4A4A4A to #3A3A3A), a 4px bottom shadow (#222) simulating key depth, and a 1px top/side border (#555). Keys display labels in 11px monospace uppercase (ESC, F1-F4, Q-T, A-G, Z-B, SPC, arrows). On mousedown/touchstart, the key depresses: translateY(3px) and shadow collapses to 1px (simulating physical key travel). On mouseup/touchend, the key toggles state. On state: purple gradient (#7C3AED to #6D28D9), light purple text (#E9D5FF), purple border (#8B5CF6), purple bottom shadow (#4C1D95), and a 16px diffuse purple glow. The transition is fast (80ms ease) to feel snappy and mechanical. The widget stores a 25-element boolean state array. No cascade — each key is independent, emphasising individual tactile feel over pattern-making.`,
+    painter_needed: false,
+    web_ux: 'Physical key depression feels satisfying with mouse; 5×5 grid gives generous clickable area per key at half_card.',
+    mobile_ux: 'Large keys (~48px) are comfortable touch targets; the 3D press effect translates well to tap feedback.',
+    tradeoff: 'Prioritises tactile realism and physical satisfaction; sacrifices cell count — fewer toggles means less pattern complexity.',
+    config_schema: [
+      { key: 'columns', type: 'int', note: 'default 5, range 3-6' },
+      { key: 'rows', type: 'int', note: 'default 5, range 3-6' },
+      { key: 'plate_color', type: 'String', note: 'hex, default "#2D2D2D"' },
+      { key: 'active_color', type: 'String', note: 'hex, default "#7C3AED"' },
+      { key: 'show_labels', type: 'bool', note: 'default true' },
+    ],
+    suggested_widget_config: { columns: 5, rows: 5, plate_color: '#2D2D2D', active_color: '#7C3AED', show_labels: true },
+    scaffold_command: 'dart run tool/new_widget.dart toggle_wall_v4',
+  },
+  v5: {
+    widget_id: 'toggle_wall_v5',
+    variant: 'Fluid Morph',
+    tile_size: 'half_card',
+    display_name: 'Toggle Wall',
+    description: `A 5×7 grid of circular blobs on a soft gradient background (135deg from #FAF5FF to #EEF2FF). Off state: circles with border-radius 50%, background #E0E7FF, 2px transparent border. On hover (web): border-radius morphs to 35%, background lightens to #C7D2FE, scale 1.1x. On tap, the blob toggles on: border-radius morphs to 25%, background becomes #818CF8, scale 1.05x, rotate 45deg, and gains a 16px colored box-shadow. The toggle-on plays a 600ms morph animation: scale 0.6 → 1.2 (with 90deg rotation at midpoint) → final 1.05 at 45deg. Cascade: when a blob activates, its 4 orthogonal neighbors also activate (if not already on) with 100ms + 80ms stagger per neighbor, each playing the morph animation. Tapping an active blob only deactivates that single blob (no cascade on deactivation). The grid uses 6px gap. The widget stores a 35-element boolean state array. The overall feel is organic and playful, contrasting the geometric bento grid.`,
+    painter_needed: false,
+    web_ux: 'Smooth morphing animation is mesmerising on hover; the organic shapes stand out against boxy portfolio tiles at half_card.',
+    mobile_ux: '5×7 cells at ~44px are on the edge; the rotation transform makes the active shape slightly larger, aiding visibility.',
+    tradeoff: 'Prioritises organic visual interest and uniqueness; sacrifices the snappy tactile feel for fluid, slower animations.',
+    config_schema: [
+      { key: 'columns', type: 'int', note: 'default 5, range 3-8' },
+      { key: 'rows', type: 'int', note: 'default 7, range 4-10' },
+      { key: 'active_color', type: 'String', note: 'hex, default "#818CF8"' },
+      { key: 'bg_gradient_start', type: 'String', note: 'hex, default "#FAF5FF"' },
+      { key: 'bg_gradient_end', type: 'String', note: 'hex, default "#EEF2FF"' },
+      { key: 'cascade_enabled', type: 'bool', note: 'default true' },
+    ],
+    suggested_widget_config: { columns: 5, rows: 7, active_color: '#818CF8', bg_gradient_start: '#FAF5FF', bg_gradient_end: '#EEF2FF', cascade_enabled: true },
+    scaffold_command: 'dart run tool/new_widget.dart toggle_wall_v5',
+  },
+};
+
+// ---- Selection logic ----
+let selectedVariant = 'v3'; // recommended
+
+function selectVariant(v) {
+  selectedVariant = v;
+  document.querySelectorAll('.variant-card').forEach(c => c.classList.remove('selected'));
+  document.querySelector(`.variant-card[data-variant="${v}"]`).classList.add('selected');
+  updatePanel();
+}
+
+function updatePanel() {
+  const h = HANDOFFS[selectedVariant];
+  const badge = document.getElementById('panel-badge');
+  badge.style.display = 'inline-block';
+  badge.textContent = h.variant;
+
+  const configSchemaStr = h.config_schema.map(c => `  ${c.key}: ${c.type} (${c.note})`).join('\n');
+  const suggestedStr = Object.entries(h.suggested_widget_config).map(([k,v]) => `  ${k}: ${JSON.stringify(v)}`).join('\n');
+
+  const handoff = `<!-- AGENT_HANDOFF
+widget_id: ${h.widget_id}
+variant: ${h.variant}
+tile_size: ${h.tile_size}
+display_name: ${h.display_name}
+description: ${h.description}
+painter_needed: ${h.painter_needed}
+web_ux: ${h.web_ux}
+mobile_ux: ${h.mobile_ux}
+tradeoff: ${h.tradeoff}
+config_schema:
+${configSchemaStr}
+suggested_widget_config:
+${suggestedStr}
+scaffold_command: ${h.scaffold_command}
+END_HANDOFF -->`;
+
+  document.getElementById('handoff-text').textContent = handoff;
+  document.getElementById('scaffold-text').textContent = h.scaffold_command;
+
+  const snippet = JSON.stringify({
+    type: 'widgets',
+    tile_size: h.tile_size,
+    widget_id: h.widget_id,
+    widget_config: h.suggested_widget_config,
+  }, null, 2);
+  document.getElementById('snippet-text').textContent = snippet;
+}
+
+function copyHandoff() { copyFromEl('handoff-text', event.target); }
+function copyScaffold() { copyFromEl('scaffold-text', event.target); }
+function copySnippet() { copyFromEl('snippet-text', event.target); }
+
+function copyFromEl(id, btn) {
+  navigator.clipboard.writeText(document.getElementById(id).textContent).then(() => {
+    btn.classList.add('copied');
+    btn.textContent = 'Copied!';
+    setTimeout(() => { btn.classList.remove('copied'); btn.textContent = btn.textContent.replace('Copied!', 'Copy'); }, 1500);
+  });
+}
+
+// Init
+selectVariant('v3');
+</script>
+
+<!-- AGENT_HANDOFF
+widget_id: toggle_wall_v3
+variant: Domino Cascade
+tile_size: half_card
+display_name: Toggle Wall
+description: A 6×8 grid of square cells with aggressive cascade behavior. Each cell is a small rounded rectangle (3px radius). Off state: #E2E8F0 (light slate). On state: #6366F1 (indigo) with scale(0.88) and rotate(2deg) transform plus a colored box-shadow. Tapping a cell toggles it and triggers a cascade to all 8 surrounding neighbors (orthogonal + diagonal). Neighbors adopt the same on/off state as the tapped cell, with staggered delays (60ms base + 40ms per neighbor). Each cascading cell plays a 300ms scale ripple animation (scale 1.15 → 1.0). On hover (web), unactivated cells lighten to #CBD5E1 and scale to 1.05x. The grid uses 3px gap. The widget stores a 48-element boolean state array. The cascade creates a satisfying wave pattern when you tap rapidly across the grid.
+painter_needed: false
+web_ux: High cell density creates satisfying chain reactions; hover preview keeps interaction intuitive at half_card.
+mobile_ux: 6×8 cells are ~36px — below 44px minimum; consider reducing to 5×7 on mobile for touch comfort.
+tradeoff: Prioritises cascade delight and pattern-making; sacrifices touch accuracy for higher tile density.
+config_schema:
+  columns: int (default 6, range 4-8)
+  rows: int (default 8, range 5-10)
+  active_color: String (hex, default "#6366F1")
+  cascade_enabled: bool (default true)
+  cascade_delay_ms: int (default 60, range 30-200)
+  include_diagonals: bool (default true)
+suggested_widget_config:
+  columns: 6
+  rows: 8
+  active_color: "#6366F1"
+  cascade_enabled: true
+  cascade_delay_ms: 60
+  include_diagonals: true
+scaffold_command: dart run tool/new_widget.dart toggle_wall_v3
+END_HANDOFF -->
+</body>
+</html>
