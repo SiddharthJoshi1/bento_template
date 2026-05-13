@@ -1,0 +1,111 @@
+{
+  "version": "1.0.0",
+  "profile": {
+    "name": "Maya Osei",
+    "bio": "Product designer. I obsess over the space between a pixel and a feeling.",
+    "avatar_path": "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=400&q=80"
+  },
+  "tiles": [
+    {
+      "type": "section_title",
+      "tile_size": "full_bar",
+      "title": "Selected work."
+    },
+    {
+      "type": "image",
+      "tile_size": "half_tower",
+      "title": "Redesigning onboarding for a fintech with 1M users.",
+      "image_path": "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&q=80"
+    },
+    {
+      "type": "image",
+      "tile_size": "quarter_card",
+      "title": "Brand identity for a sustainable fashion label.",
+      "image_path": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80"
+    },
+    {
+      "type": "image",
+      "tile_size": "quarter_card",
+      "title": "Motion system for a B2B SaaS product.",
+      "image_path": "https://images.unsplash.com/photo-1535223289429-462edb7e6574?w=800&q=80"
+    },
+    {
+      "type": "image",
+      "tile_size": "half_tower",
+      "title": "Design system built from scratch — 200+ components.",
+      "image_path": "https://images.unsplash.com/photo-1542744094-3a31f272c490?w=800&q=80"
+    },
+    {
+      "type": "section_title",
+      "tile_size": "full_bar",
+      "title": "What I believe."
+    },
+    {
+      "type": "text",
+      "tile_size": "half_card",
+      "title": "Good design doesn't announce itself. It just makes everything feel obvious in hindsight.",
+      "colour": "#c9184a"
+    },
+    {
+      "type": "text",
+      "tile_size": "quarter_card",
+      "title": "Figma",
+      "colour": "#ff4d6d"
+    },
+    {
+      "type": "text",
+      "tile_size": "quarter_card",
+      "title": "Framer",
+      "colour": "#c9184a"
+    },
+    {
+      "type": "section_title",
+      "tile_size": "full_bar",
+      "title": "Find me."
+    },
+    {
+      "type": "map",
+      "tile_size": "half_card",
+      "title": "Amsterdam, Netherlands",
+      "latitude": 52.3676,
+      "longitude": 4.9041
+    },
+    {
+      "type": "link",
+      "tile_size": "quarter_card",
+      "title": "Dribbble",
+      "url": "https://dribbble.com"
+    },
+    {
+      "type": "link",
+      "tile_size": "quarter_card",
+      "title": "Read.cv",
+      "url": "https://read.cv"
+    },
+    {
+      "type": "section_title",
+      "tile_size": "full_bar",
+      "title": "Currently playing with."
+    },
+    {
+      "type": "widgets",
+      "tile_size": "half_tower",
+      "title": "Neon grid",
+      "widget_id": "toggle_wall_v2",
+      "widget_config": {
+        "columns": 4,
+        "rows": 6,
+        "bg_color": "#0F0F1A",
+        "neon_colors": ["#FF006E", "#c9184a", "#ff4d6d", "#FFD600", "#BF00FF", "#FF4500"],
+        "glow_intensity": 1.2
+      }
+    },
+    {
+      "type": "text",
+      "tile_size": "half_bar",
+      "title": "Get in touch",
+      "url": "mailto:maya@mayaosei.com",
+      "colour": "#000000"
+    }
+  ]
+}

@@ -42,9 +42,15 @@ A setup script handles this for you. From the root of your repo:
 bash scripts/init_content_branch.sh
 ```
 
+If you want to bootstrap from one of the starter configs in `examples/` instead of the default content:
+
+```bash
+bash scripts/init_content_branch.sh examples/developer.json
+```
+
 Here's what it does, step by step:
 
-1. **Reads `assets/data/content.json` directly from your main branch** using `git show` — no temp files, no manual copying
+1. **Reads the source `content.json`** from your working tree — either `assets/data/content.json` (default) or a path you pass as an argument (e.g. `examples/developer.json`)
 2. **Creates an orphan branch** called `content` — a branch with no shared history with main, keeping it clean and minimal
 3. **Wipes the working tree** so the branch contains only what the app needs to fetch
 4. **Reconstructs `assets/data/content.json`** on the new branch using the content read in step 1
@@ -83,6 +89,8 @@ Optionally, also add a `MAP_USER_AGENT` variable (reverse-DNS format, e.g. `com.
 ---
 
 ## Step 4 — Customise content.json
+
+> **Not sure where to start?** The [`examples/`](./examples/) folder has three starter configs — `developer.json`, `designer.json`, and `minimal.json`. Copy one into `assets/data/content.json` and edit from there.
 
 Edit `content.json` on the `content` branch (or locally in `assets/data/content.json` for the bundled fallback).
 

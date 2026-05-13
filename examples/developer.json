@@ -1,0 +1,124 @@
+{
+  "version": "1.0.0",
+  "profile": {
+    "name": "Alex Chen",
+    "bio": "Senior software engineer. I build tools, ship open source, and write about what I learn.",
+    "avatar_path": "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=400&q=80"
+  },
+  "tiles": [
+    {
+      "type": "section_title",
+      "tile_size": "full_bar",
+      "title": "What I'm shipping."
+    },
+    {
+      "type": "link",
+      "tile_size": "half_tower",
+      "title": "My open source CLI tool — 2k stars and counting.",
+      "url": "https://github.com",
+      "image_path": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=80"
+    },
+    {
+      "type": "link",
+      "tile_size": "half_tower",
+      "title": "The Flutter package I built and published to pub.dev.",
+      "url": "https://pub.dev",
+      "image_path": "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80"
+    },
+    {
+      "type": "section_title",
+      "tile_size": "full_bar",
+      "title": "How I think."
+    },
+    {
+      "type": "text",
+      "tile_size": "half_card",
+      "title": "I care about the gap between code that works and code that lasts. Clean architecture isn't dogma — it's just respect for future-you.",
+      "colour": "#1a1a2e"
+    },
+    {
+      "type": "text",
+      "tile_size": "quarter_card",
+      "title": "Dart / Flutter",
+      "colour": "#0f3460"
+    },
+    {
+      "type": "text",
+      "tile_size": "quarter_card",
+      "title": "TypeScript / Node",
+      "colour": "#16213e"
+    },
+    {
+      "type": "section_title",
+      "tile_size": "full_bar",
+      "title": "Recent writing."
+    },
+    {
+      "type": "link",
+      "tile_size": "half_tower",
+      "title": "Why I stopped using setState and never looked back.",
+      "url": "https://substack.com",
+      "image_path": "https://images.unsplash.com/photo-1455390582262-044cdead277a?w=800&q=80"
+    },
+    {
+      "type": "link",
+      "tile_size": "half_tower",
+      "title": "Building a bin-packing algorithm in pure Dart.",
+      "url": "https://substack.com",
+      "image_path": "https://images.unsplash.com/photo-1506097425191-7ad538b29cef?w=800&q=80"
+    },
+    {
+      "type": "section_title",
+      "tile_size": "full_bar",
+      "title": "Find me."
+    },
+    {
+      "type": "map",
+      "tile_size": "quarter_card",
+      "title": "Berlin, Germany",
+      "latitude": 52.52,
+      "longitude": 13.405
+    },
+    {
+      "type": "link",
+      "tile_size": "quarter_card",
+      "title": "GitHub",
+      "url": "https://github.com"
+    },
+    {
+      "type": "link",
+      "tile_size": "half_card",
+      "title": "Let's connect on LinkedIn.",
+      "url": "https://linkedin.com",
+      "image_path": "https://images.unsplash.com/photo-1611944212129-29977ae1398c?w=800&q=80"
+    },
+    {
+      "type": "section_title",
+      "tile_size": "full_bar",
+      "title": "A widget, because I can."
+    },
+    {
+      "type": "widgets",
+      "tile_size": "half_tower",
+      "title": "Deploys today",
+      "widget_id": "counter_v1",
+      "colour": "#0f3460",
+      "widget_config": {
+        "label": "Deploys"
+      }
+    },
+    {
+      "type": "text",
+      "tile_size": "half_card",
+      "title": "Got a project in mind? Let's talk.",
+      "colour": "#16213e"
+    },
+    {
+      "type": "text",
+      "tile_size": "half_bar",
+      "title": "Get in touch",
+      "url": "mailto:alex@alexchen.dev",
+      "colour": "#000000"
+    }
+  ]
+}

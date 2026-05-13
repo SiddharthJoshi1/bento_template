@@ -3,7 +3,7 @@
 # Creates the content branch used for live portfolio updates.
 #
 # What this script does:
-#   1. Reads assets/data/content.json directly from your main branch (no temp files)
+#   1. Reads a content.json from your local working tree (defaults to assets/data/content.json)
 #   2. Creates an orphan branch called `content` — a branch with no shared history
 #   3. Wipes the working tree so the branch contains only what the app needs to fetch
 #   4. Reconstructs the required folder path and drops content.json into it
@@ -12,16 +12,27 @@
 #
 # Run from the root of your repo:
 #   bash scripts/init_content_branch.sh
+#
+# To bootstrap from one of the starter configs in examples/:
+#   bash scripts/init_content_branch.sh examples/developer.json
+#   bash scripts/init_content_branch.sh examples/designer.json
+#   bash scripts/init_content_branch.sh examples/minimal.json
 
 set -e
 
 BRANCH="content"
 CONTENT_PATH="assets/data/content.json"
+SOURCE_FILE="${1:-$CONTENT_PATH}"
 
 echo "→ Checking you're on main..."
 CURRENT=$(git rev-parse --abbrev-ref HEAD)
 if [ "$CURRENT" != "main" ]; then
   echo "Error: run this script from the main branch (currently on '$CURRENT')"
+  exit 1
+fi
+
+if [ ! -f "$SOURCE_FILE" ]; then
+  echo "Error: source file not found: $SOURCE_FILE"
   exit 1
 fi
 
@@ -32,9 +43,12 @@ if git ls-remote --exit-code --heads origin content > /dev/null 2>&1; then
   exit 1
 fi
 
-echo "→ Reading $CONTENT_PATH from main..."
-# Pull the file content directly from git's object store — no temp files, no manual copying
-CONTENT=$(git show main:"$CONTENT_PATH")
+if [ "$SOURCE_FILE" != "$CONTENT_PATH" ]; then
+  echo "→ Using $SOURCE_FILE as content source..."
+else
+  echo "→ Using $CONTENT_PATH as content source..."
+fi
+CONTENT=$(cat "$SOURCE_FILE")
 
 echo "→ Creating orphan branch '$BRANCH'..."
 git checkout --orphan "$BRANCH"

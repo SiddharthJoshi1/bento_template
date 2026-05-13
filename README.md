@@ -6,6 +6,8 @@ Fork this repo, customise `content.json`, and deploy your own portfolio in under
 
 **[View live demo →](https://siddharthjoshi1.github.io/bento_template/)**
 
+![Bento Template preview](examples/assets/Developer%20Content%20Bento.gif)
+
 ## Features
 
 - **Bento grid layout** with 9 tile size variants combining width (quarter/half/full) and height (bar/card/tower)
@@ -28,6 +30,7 @@ Click **Use this template → Create a new repository**, then follow [`SETUP.md`
 | [`SETUP.md`](./SETUP.md) | Fork, configure your content branch, personalise metadata, deploy |
 | [`WIDGET_GUIDE.md`](./WIDGET_GUIDE.md) | Build your own interactive widgets — step-by-step with a working example |
 | [`CLAUDE.md`](./CLAUDE.md) | Architecture reference, content schema, layer rules — for LLM agents and contributors |
+| [`examples/`](./examples/) | Three starter `content.json` files — developer, designer, minimal |
 | [`skills/`](./skills/) | Claude Code skills for prototyping and implementing widgets with AI |
 
 ## Architecture
