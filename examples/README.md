@@ -10,7 +10,7 @@ Engineer or open source author. Project links with cover images, text tiles for 
 
 **Good for:** software engineers, indie hackers, OSS maintainers.
 
-![Developer example](assets/Developer%20Content%20Bento.gif)
+![Developer example](assets/Designer%20Content%20Bento.gif)
 
 ---
 
@@ -20,7 +20,7 @@ Visual and image-heavy. Four `image` tiles in the work section, text tiles for t
 
 **Good for:** product designers, brand designers, creative directors.
 
-![Designer example](assets/Designer%20Content%20Bento.gif)
+![Designer example](assets/Developer%20Content%20Bento.gif)
 
 ---
 
