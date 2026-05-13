@@ -1,0 +1,71 @@
+{
+  "version": "1.0.0",
+  "profile": {
+    "name": "Sam Rivera",
+    "bio": "Building things on the internet. Currently focused on developer tooling.",
+    "avatar_path": "https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=400&q=80"
+  },
+  "tiles": [
+    {
+      "type": "section_title",
+      "tile_size": "full_bar",
+      "title": "Work."
+    },
+    {
+      "type": "link",
+      "tile_size": "half_tower",
+      "title": "My main project.",
+      "url": "https://github.com",
+      "image_path": "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=800&q=80"
+    },
+    {
+      "type": "text",
+      "tile_size": "half_card",
+      "title": "Senior engineer at a startup in Amsterdam. Previously Google, previously building my own things.",
+      "colour": "#2d2d2d"
+    },
+    {
+      "type": "text",
+      "tile_size": "half_bar",
+      "title": "Open to interesting conversations.",
+      "url": "mailto:sam@samrivera.com",
+      "colour": "#000000"
+    },
+    {
+      "type": "text",
+      "tile_size": "half_bar",
+      "title": "Available for contract work.",
+      "colour": "#1a1a1a"
+    },
+    {
+      "type": "section_title",
+      "tile_size": "full_bar",
+      "title": "Links."
+    },
+    {
+      "type": "map",
+      "tile_size": "quarter_card",
+      "title": "Amsterdam, Netherlands",
+      "latitude": 52.3676,
+      "longitude": 4.9041
+    },
+    {
+      "type": "link",
+      "tile_size": "quarter_card",
+      "title": "GitHub",
+      "url": "https://github.com"
+    },
+    {
+      "type": "link",
+      "tile_size": "quarter_card",
+      "title": "LinkedIn",
+      "url": "https://linkedin.com"
+    },
+    {
+      "type": "link",
+      "tile_size": "quarter_card",
+      "title": "Writing",
+      "url": "https://substack.com"
+    }
+  ]
+}

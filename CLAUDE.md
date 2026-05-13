@@ -251,6 +251,7 @@ skills/bento-widget-complete/SKILL.md  →  read before implementing
 ## Related
 
 - `AGENTS.md` — agent-specific workflow guidance
+- `examples/` — three starter `content.json` files (developer, designer, minimal)
 - `skills/bento-widget-preview/` — HTML prototyping skill for interactive widgets
 - `skills/bento-widget-complete/` — Flutter implementation skill for interactive widgets
 - `assets/data/content.json` — bundled content fallback
