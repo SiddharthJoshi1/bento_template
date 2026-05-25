@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../../../core/injector.dart';
 import '../../../../../domain/entities/link.dart';
@@ -148,7 +149,7 @@ class LinkTileRenderer extends StatelessWidget {
       color: Colors.white,
       child: Padding(
         padding: const EdgeInsets.all(AppInsets.s),
-        child: Icon(
+        child: FaIcon(
           LinkIconMapping.getIcon(linkEntity.linkIcon),
           color: linkEntity.brandColour.toColour(),
           size: AppIconSizes.m,

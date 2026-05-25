@@ -1,13 +1,12 @@
-import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class LinkIconMapping {
-  /// Maps the FontAwesome class string (from the Entity) to the Flutter IconData
-  static IconData getIcon(String iconString) {
+  /// Maps the FontAwesome class string (from the Entity) to FaIconData
+  static FaIconData getIcon(String iconString) {
     return _iconMap[iconString] ?? FontAwesomeIcons.link;
   }
 
-  static const Map<String, IconData> _iconMap = {
+  static const Map<String, FaIconData> _iconMap = {
     // Brands
     'fa-brands fa-instagram': FontAwesomeIcons.instagram,
     'fa-brands fa-facebook': FontAwesomeIcons.facebook,
