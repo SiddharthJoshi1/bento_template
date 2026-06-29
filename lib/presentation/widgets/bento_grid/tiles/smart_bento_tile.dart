@@ -77,7 +77,7 @@ class SmartBentoTile extends StatelessWidget {
           : null,
       child: Card(
         elevation: config.type == TileType.sectionTitle ? 0 : 2,
-        clipBehavior: Clip.antiAlias,
+        clipBehavior: Clip.hardEdge,
         color: backgroundColour,
         child: InkWell(
           onTap: null,

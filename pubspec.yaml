@@ -16,7 +16,7 @@ dependencies:
   flutter_bloc: ^9.1.0
   shared_preferences: ^2.5.3
   lukehog_client: ^0.4.6
-  bento_layout: ^0.1.0
+  bento_layout: ^0.2.0
   flutter_map: ^8.1.1
   latlong2: ^0.9.1
   http: ^1.6.0

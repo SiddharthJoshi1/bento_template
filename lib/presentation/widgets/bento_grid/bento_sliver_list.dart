@@ -2,7 +2,6 @@ import 'package:bento_template/domain/entities/profile_data.dart';
 import 'package:bento_layout/bento_layout.dart';
 import 'package:flutter/material.dart';
 
-
 import '../../../../core/constants.dart';
 import '../../../../domain/entities/tile_config.dart';
 import '../../../core/responsive/breakpoints.dart';
@@ -39,34 +38,52 @@ class BentoSliverList extends StatelessWidget {
         )
         .toList();
 
+    final horizontalPadding = isMobile ? 0.0 : 20.0;
+
     return Center(
-      child: CustomScrollView(
-        slivers: [
-          const SliverToBoxAdapter(child: SizedBox(height: 20)),
-      
-          // Profile header — mobile only, desktop uses the side panel
-          if (isMobile) ...[
-             SliverToBoxAdapter(child: ProfileSection(profile: profileData)),
-            const SliverToBoxAdapter(child: SizedBox(height: 20)),
-          ],
-      
-          // Bento grid via the package delegate
-          SliverPadding(
-            padding: isMobile
-                ? EdgeInsets.zero
-                : const EdgeInsets.symmetric(horizontal: 20),
-            sliver: SliverGrid(
-              gridDelegate: BentoGridDelegate(
-                items: items,
-                unitHeight: LayoutConstants.unitHeight,
-              ),
-              delegate: SliverChildBuilderDelegate(
-                (context, index) => items[index].child,
-                childCount: items.length,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final availableWidth = constraints.maxWidth - (horizontalPadding * 2);
+
+          final details = SkylinePacking.pack(
+            items: items,
+            totalWidth: availableWidth,
+            unitHeight: LayoutConstants.unitHeight,
+          );
+
+          return SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+              child: Column(
+                children: [
+                  const SizedBox(height: 20),
+
+                  if (isMobile) ...[
+                    ProfileSection(profile: profileData),
+                    const SizedBox(height: 20),
+                  ],
+
+                  SizedBox(
+                    height: details.totalHeight,
+                    width: availableWidth,
+                    child: Stack(
+                      children: [
+                        for (final entry in details.geometryMap.entries)
+                          Positioned(
+                            left: entry.value.crossAxisOffset,
+                            top: entry.value.scrollOffset,
+                            width: entry.value.crossAxisExtent,
+                            height: entry.value.mainAxisExtent,
+                            child: items[entry.key].child,
+                          ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
-          ),
-        ],
+          );
+        },
       ),
     );
   }
