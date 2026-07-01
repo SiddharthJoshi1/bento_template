@@ -72,18 +72,29 @@ class _PortfolioShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PortfolioBloc, PortfolioState>(
-      builder: (context, state) {
-        return switch (state) {
-          PortfolioLoading() => const BentoLoadingScreen(),
-          PortfolioLoaded(:final content) => HomePage(
-              profileWidget: ProfileSection(profile: content.profile),
-              tileSectionWidget: BentoSliverList(tiles: content.tiles, profileData: content.profile),
-            ),
-          PortfolioError(:final message) => BentoErrorScreen(message: message),
-          _ => const BentoLoadingScreen(),
-        };
+    return BlocListener<PortfolioBloc, PortfolioState>(
+      listenWhen: (prev, curr) => curr is PortfolioLoaded,
+      listener: (context, state) {
+        if (state is PortfolioLoaded) {
+          context.read<ThemeCubit>().applyContentDefault(
+                flavourId: state.content.themeFlavourId,
+                themeMode: state.content.themeMode,
+              );
+        }
       },
+      child: BlocBuilder<PortfolioBloc, PortfolioState>(
+        builder: (context, state) {
+          return switch (state) {
+            PortfolioLoading() => const BentoLoadingScreen(),
+            PortfolioLoaded(:final content) => HomePage(
+                profileWidget: ProfileSection(profile: content.profile),
+                tileSectionWidget: BentoSliverList(tiles: content.tiles, profileData: content.profile),
+              ),
+            PortfolioError(:final message) => BentoErrorScreen(message: message),
+            _ => const BentoLoadingScreen(),
+          };
+        },
+      ),
     );
   }
 }

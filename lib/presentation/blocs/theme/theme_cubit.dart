@@ -11,26 +11,11 @@ class _Keys {
   static const String flavourId = 'theme_flavour_id';
 }
 
-/// Cubit that owns the app theme — brightness mode + active flavour.
-///
-/// Toggling the mode switches between the light and dark variant of the
-/// same flavour, so the palette choice stays consistent.
-///
-/// Usage:
-/// ```dart
-/// context.read<ThemeCubit>().toggleTheme();
-/// context.read<ThemeCubit>().setFlavour(ThemeFlavours.byId('dusk'));
-/// ```
 class ThemeCubit extends Cubit<ThemeState> {
   ThemeCubit() : super(const ThemeState()) {
     _loadFromPrefs();
   }
 
-  // ---------------------------------------------------------------------------
-  // Public API
-  // ---------------------------------------------------------------------------
-
-  /// Toggles between light and dark mode, keeping the active flavour the same.
   void toggleTheme() {
     final newMode =
         state.mode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
@@ -38,15 +23,38 @@ class ThemeCubit extends Cubit<ThemeState> {
     _saveToPrefs();
   }
 
-  /// Switches to [flavour], keeping the current brightness mode.
   void setFlavour(ThemeFlavour flavour) {
     emit(state.copyWith(flavourId: flavour.id));
     _saveToPrefs();
   }
 
-  // ---------------------------------------------------------------------------
-  // Persistence
-  // ---------------------------------------------------------------------------
+  /// Applies the content.json theme as the initial default. Only takes
+  /// effect if the user hasn't previously saved a theme preference.
+  /// Skips the emit if the resulting state would be identical.
+  Future<void> applyContentDefault({
+    String? flavourId,
+    String? themeMode,
+  }) async {
+    if (flavourId == null && themeMode == null) return;
+
+    final prefs = await SharedPreferences.getInstance();
+    final hasUserPreference = prefs.containsKey(_Keys.isDark) ||
+        prefs.containsKey(_Keys.flavourId);
+    if (hasUserPreference) return;
+
+    final mode = switch (themeMode) {
+      'dark' => ThemeMode.dark,
+      'light' => ThemeMode.light,
+      _ => null,
+    };
+
+    final newState = state.copyWith(
+      flavourId: flavourId,
+      mode: mode,
+    );
+
+    if (newState != state) emit(newState);
+  }
 
   Future<void> _loadFromPrefs() async {
     final prefs = await SharedPreferences.getInstance();

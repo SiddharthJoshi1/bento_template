@@ -57,7 +57,15 @@ class RemoteConfigRepository {
         .map((e) => TileConfig.fromJson(e as Map<String, dynamic>))
         .toList();
 
-    return PortfolioContent(tiles: tiles, profile: profile);
+    final themeFlavourId = contentJson['theme_flavour'] as String?;
+    final themeMode = contentJson['theme_mode'] as String?;
+
+    return PortfolioContent(
+      tiles: tiles,
+      profile: profile,
+      themeFlavourId: themeFlavourId,
+      themeMode: themeMode,
+    );
   }
 
   // ---------------------------------------------------------------------------
