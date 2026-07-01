@@ -1,5 +1,7 @@
 {
-  "version": "1.0.3",
+  "version": "2.0.0",
+  "theme_flavour": "dusk",
+  "theme_mode": "dark",
   "profile": {
     "name": "Your Name",
     "bio": "One-line bio that tells people what you do and what you care about.",
