@@ -54,7 +54,8 @@ class _MapTileRendererState extends State<MapTileRenderer> {
     return Stack(
       fit: StackFit.expand,
       children: [
-        FlutterMap(
+        RepaintBoundary(
+          child: FlutterMap(
           mapController: _mapController,
           options: MapOptions(
             initialCenter: centre,
@@ -79,6 +80,7 @@ class _MapTileRendererState extends State<MapTileRenderer> {
               ],
             ),
           ],
+        ),
         ),
         if (widget.config.title != null && widget.config.title!.isNotEmpty)
           Positioned(

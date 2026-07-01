@@ -48,18 +48,18 @@ class SmartBentoTile extends StatelessWidget {
       }
   }
 
+  static final _nonAlphaNum = RegExp(r'[^a-z0-9\s]');
+  static final _whitespace = RegExp(r'\s+');
+
   Color _getBackgroundCardColour() {
     if (config.type == TileType.link && config.colour == null) {
-      final brandColour =
-          locator<LinkRepository>().getLinkData(config.url ?? "").brandColour;
+      final linkData = locator<LinkRepository>().getLinkData(config.url ?? "");
+      final brandColour = linkData.brandColour;
       return brandColour == "#000000" || brandColour == "#FFFFFF"
           ? Colors.white
-          : locator<LinkRepository>()
-                .getLinkData(config.url ?? "")
-                .brandColour
-                .toSuperLightColour();
-    }  
-      return config.colour != null ? config.colour!.toColour() : Colors.transparent;
+          : brandColour.toSuperLightColour();
+    }
+    return config.colour != null ? config.colour!.toColour() : Colors.transparent;
   }
 
   Widget _buildBackgroundCard(Widget child, Color backgroundColour) {
@@ -97,9 +97,9 @@ class SmartBentoTile extends StatelessWidget {
   void _trackTileTapped(String tileTitle) {
     final slug = tileTitle
         .toLowerCase()
-        .replaceAll(RegExp(r'[^a-z0-9\s]'), '')
+        .replaceAll(_nonAlphaNum, '')
         .trim()
-        .replaceAll(RegExp(r'\s+'), '_');
+        .replaceAll(_whitespace, '_');
     locator<AnalyticsRepository>().trackTileTapped('tile_tapped_$slug');
   }
 }

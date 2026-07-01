@@ -15,25 +15,31 @@ class _BentoInteractionEffectState extends State<BentoInteractionEffect> {
   bool _isHovered = false;
   bool _isPressed = false;
 
+  void _setHovered(bool value) {
+    if (_isHovered != value) setState(() => _isHovered = value);
+  }
+
+  void _setPressed(bool value) {
+    if (_isPressed != value) setState(() => _isPressed = value);
+  }
+
   @override
   Widget build(BuildContext context) {
-    // If no tap handler, don't show pointer or animate
     if (widget.onTap == null) return widget.child;
 
     return MouseRegion(
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
+      onEnter: (_) => _setHovered(true),
+      onExit: (_) => _setHovered(false),
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
         onTap: widget.onTap,
-        onTapDown: (_) => setState(() => _isPressed = true),
-        onTapUp: (_) => setState(() => _isPressed = false),
-        onTapCancel: () => setState(() => _isPressed = false),
+        onTapDown: (_) => _setPressed(true),
+        onTapUp: (_) => _setPressed(false),
+        onTapCancel: () => _setPressed(false),
         child: AnimatedScale(
-          // Logic: Squish when clicked (0.98), Scale up when hovered (1.02), else normal (1.0)
           scale: _isPressed ? 0.98 : (_isHovered ? 1.02 : 1.0),
           duration: const Duration(milliseconds: AnimationConstants.tileScaleDuration),
-          curve: Curves.easeOutCubic, // The "Bento" springy feel
+          curve: Curves.easeOutCubic,
           child: widget.child,
         ),
       ),
